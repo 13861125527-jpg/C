@@ -27,7 +27,33 @@ int main()
 void HeapInit(Heap* php);
 void HeapDestroy(Heap* php);
 void HeapPush(Heap* php,HPDataType x);
+void HeapPop(Heap* php);
+void HeapEmpty(Heap* php);
+void HeapPrint(Heap* php);
+void HeapSort(HPDataType* data,int size);
+void HeapSort(HPDataType* data,int size)
+{
+    int i;
+    for(i=1;i<size;i++)
+    {
+        AdjustUp(data,i);
+    }
+}
 //数组存储表示二叉树只适合完全二叉树
+void HeapPrint(Heap* php)
+{
+    assert(php);
+    for(int i=0;i<php->size;i++)
+    {
+        printf("%d ",php->data[i]);
+    }
+    printf("\n");
+}
+void HeapEmpty(Heap* php)
+{
+    assert(php);
+    return php->size==0;
+}
 void HeapInit(Heap* php)
 {
   assert(php);
@@ -75,6 +101,27 @@ void AdjustUp(HPDataType* data,int child)
     }
 
 }
+void AdjustDown(HPDataType* data,int size,int parent)
+{
+    int child=parent*2+1;
+    while (child<size)
+    {
+        if(php->data[child]<php->data[child+1] && child+1<size)
+        {
+            child++;
+        }
+        if(php->data[parent]<php->data[child])
+        {
+            Swap(&php->data[parent],&php->data[child])
+            parent=child;
+            child=parent*2+1;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
 void HeapPush(Heap* php,HPDataType x)
 {
     assert(php);
@@ -93,4 +140,16 @@ void HeapPush(Heap* php,HPDataType x)
     php->size++;
     AdjustUp(php->data,php->size-1);
 
+}
+
+void HeapPop(Heap* php)
+{
+    assert(php);
+    if(php->size==0)
+    {
+        return;
+    }
+    Swap(&php->data[0],&php->data[size-1]);
+    php->size--;
+    AdjustDown(php->data,php->size,0);
 }
